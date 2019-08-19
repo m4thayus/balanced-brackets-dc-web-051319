@@ -1,3 +1,5 @@
+//Use a stack....
+
 function isBalanced(brackets) {
 
     if (brackets.length % 2 !== 0) {
