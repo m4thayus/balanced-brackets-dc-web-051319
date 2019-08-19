@@ -7,28 +7,70 @@ function isBalanced(brackets) {
     brackets.split('')
     histogram = {}
     for (let i = 0; i < brackets.length; i++) {
-        if (histogram[brackets[i]]) {
-            histogram[brackets[i]] += 1
+        brace = brackets[i]
+        console.log("Brace:", brace)
+        if (!!histogram[brace]) {
+            histogram[brace] += 1
         } else {
-            histogram[brackets[i]] = 1
+            if (brace === ")" && !!histogram["("]) {
+                histogram["("] -= 1
+                if (histogram["("] < 0) {
+                    return false
+                }
+            } else if (brace === "}" && !!histogram["{"]) {
+                histogram["{"] -= 1
+                if (histogram["{"] < 0) {
+                    return false
+                }
+            } else if (brace === "]" && !!histogram["["]) {
+                histogram["["] -= 1
+                if (histogram["["] < 0) {
+                    return false
+                }
+            } else {
+                histogram[brace] = 1
+            }
         }
+
+        console.log(`Run ${i}:`, histogram)
     }
 
-    if (
-        histogram["("] === histogram[")"] &&
-        histogram["{"] === histogram["}"] &&
-        histogram["["] === histogram["]"]
-    ) {
-        return true
-    } else {
-        return false
+    let flag1 = false
+    let flag2 = false
+    let flag3 = false
+
+    if (!histogram["{"] || histogram["{"] === 0) {
+        flag1 = true
+    } 
+    console.log("{", flag1)
+
+    if (!histogram["("] || histogram["("] === 0) {
+        flag2 = true
     }
+    console.log("(", flag2)
+
+    if (!histogram["["] || histogram["["] === 0) {
+        flag3 = true
+    }
+    console.log("[", flag3)
+
+    console.log("Hist", histogram)
+    return flag1 && flag2 && flag3
 }
 
-console.log(isBalanced("()[]"))
+console.log("Balanced:", isBalanced("()[]"), "true")
+console.log()
+console.log("Balanced:", isBalanced("([])"), "true")
+console.log()
+console.log("Balanced:", isBalanced("({)}"), "true")
+console.log()
+console.log("Balanced",  isBalanced("{[}"), "false")
 
-console.log(isBalanced("([])"))
+console.log()
+console.log()
 
-console.log(isBalanced("({)}"))
-
-console.group(isBalanced("{[}"))
+console.log("Balanced",  isBalanced("([])[{}]{(())}"), "true")
+console.log()
+console.log("Balanced",  isBalanced("([])[{}]{(([))}"), "false")
+console.log()
+console.log("Balanced",  isBalanced("([])[{}]{([)]}"), "false")
